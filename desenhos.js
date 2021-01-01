@@ -1,4 +1,46 @@
 import { canvas, contexto, sprites } from './elementosHTML.js'
+import { fazColisao } from './fisica.js'
+import { mudaParaTela, Telas } from './telas.js'
+
+
+export const criaFlappyBird = () => {
+    const flappyBird = {
+        spriteX: 0,
+        spriteY: 0,
+        largura: 33,
+        altura: 24,
+        x: 10,
+        y: 50,
+        pulo: 4.6,
+        pula() {
+            console.log('devo pular')
+            flappyBird.velocidade = -flappyBird.pulo
+        },
+        velocidade: 0,
+        gravidade: 0.25,
+        atualiza() {
+            if (fazColisao(flappyBird, chao)) {
+                console.log("VC BATEU SEU PORRA")
+                mudaParaTela(Telas.INICIO)
+                return
+            }
+
+            flappyBird.velocidade += flappyBird.gravidade
+            flappyBird.y += flappyBird.velocidade
+        },
+        desenha() {
+            contexto.drawImage(
+                sprites,
+                flappyBird.spriteX, flappyBird.spriteY, // Sprite X, Sprite Y
+                flappyBird.largura, flappyBird.altura, // Tamanho do recorte na sprite
+                flappyBird.x, flappyBird.y,
+                flappyBird.largura, flappyBird.altura
+            )
+        }
+    }
+
+    return flappyBird
+}
 
 export const chao = {
     spriteX: 0,
@@ -49,30 +91,6 @@ export const planoDeFundo = {
             planoDeFundo.largura, planoDeFundo.altura, // Tamanho do recorte na sprite
             (planoDeFundo.x + planoDeFundo.largura), planoDeFundo.y,
             planoDeFundo.largura, planoDeFundo.altura
-        )
-    }
-}
-
-export const flappyBird = {
-    spriteX: 0,
-    spriteY: 0,
-    largura: 33,
-    altura: 24,
-    x: 10,
-    y: 50,
-    velocidade: 0,
-    gravidade: 0.25,
-    atualiza() {
-        flappyBird.velocidade += flappyBird.gravidade
-        flappyBird.y += flappyBird.velocidade
-    },
-    desenha() {
-        contexto.drawImage(
-            sprites,
-            flappyBird.spriteX, flappyBird.spriteY, // Sprite X, Sprite Y
-            flappyBird.largura, flappyBird.altura, // Tamanho do recorte na sprite
-            flappyBird.x, flappyBird.y,
-            flappyBird.largura, flappyBird.altura
         )
     }
 }
